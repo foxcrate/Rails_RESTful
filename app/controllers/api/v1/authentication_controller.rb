@@ -7,22 +7,16 @@ class Api::V1::AuthenticationController < ApplicationController
     rescue_from UserNotFoundError, with: :user_not_found
     
     def sign_up
-        params.require(:name).inspect
+        params.require(:user_name).inspect
         params.require(:password).inspect
 
-        new_user = User.new(name: params[:name],password: params[:password])
+        new_user = User.new(name: params[:user_name],password: params[:password])
         if new_user.save
             user_object = UserRepresenter.get(new_user)
             render json: user_object , status: :created
         else 
             render json: new_user.errors, status: :unprocessable_entity
         end
-
-    end
-    
-    def sign_in
-        params.require(:user_name).inspect
-        params.require(:password).inspect
 
     end
     
