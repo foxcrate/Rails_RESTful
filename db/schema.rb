@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_07_111941) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_10_134732) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,6 +46,23 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_07_111941) do
     t.index ["student_id"], name: "index_courses_students_on_student_id"
   end
 
+  create_table "lessons", force: :cascade do |t|
+    t.string "title"
+    t.integer "hours"
+    t.bigint "course_id"
+    t.datetime "created_at", null: true
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_lessons_on_course_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.integer "reviewable_id"
+    t.string "reviewable_type"
+    t.integer "rating"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "students", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -58,8 +75,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_07_111941) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "password_digest"
+    t.boolean "admin", default: false
+    t.string "role", default: "visitor"
   end
 
   add_foreign_key "courses_students", "courses"
   add_foreign_key "courses_students", "students"
+  add_foreign_key "lessons", "courses"
 end

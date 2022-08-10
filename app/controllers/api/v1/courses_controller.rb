@@ -1,4 +1,5 @@
 class Api::V1::CoursesController < ApplicationController
+  load_and_authorize_resource
   before_action :authenticate_user , only: [:get_students,:add_students]
 
   class NoTokenError < StandardError; end
